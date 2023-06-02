@@ -40,7 +40,6 @@ while True:
     x = 0
     xIncrement = math.floor(wWidth / menuCount)
 
-
     handsDetector = detector.findHands(cameraFeedImg, flipType=False)
     hands = handsDetector[0]
     cameraFeedImg = handsDetector[1]
@@ -48,7 +47,7 @@ while True:
     try:
         if hands:
             hand1 = hands[0]
-            lmList1 = hand1["lmList"]  
+            lmList1 = hand1["lmList"]
             indexFingerTop = lmList1[8]
             indexFingerBottom = lmList1[6]
 
@@ -61,44 +60,45 @@ while True:
                         break
                     i = i+1
 
-            
             if (indexFingerTop[1] > indexFingerBottom[1]):
                 isImageSelected = False
 
-        
     except Exception as e:
-            print(e)
+        print(e)
 
-    cameraFeedImg, faces = faceDetector.findFaceMesh(cameraFeedImg, draw= False)
+    # Store the faces with the face mesh landmarks
+    cameraFeedImg, faces = faceDetector.findFaceMesh(cameraFeedImg, draw=False)
 
     try:
         # Store the x and y coordinates for the landmark point where filter is to be placed
-        for face in faces: 
-            xLoc= face[21][0]
-            yLoc= face[21][1]
-            
-            if(menuChoice > -1):
+        for face in faces:
+            xLoc = face[21][0]
+            yLoc = face[21][1]
+
+            if (menuChoice > -1):
                 if (isImageSelected):
                     image = cv2.resize(menuImages[menuChoice], (100, 100))
-                    cameraFeedImg = cvzone.overlayPNG(cameraFeedImg, image, [int(indexFingerTop[0]), int(indexFingerTop[1])])
+                    cameraFeedImg = cvzone.overlayPNG(
+                        cameraFeedImg, image, [int(indexFingerTop[0]), int(indexFingerTop[1])])
                 else:
                     # Resize the image to 100, 100
-                    filterImg = cv2.resize(menuImages[menuChoice], (100, 100))              
+                    filterImg = cv2.resize(menuImages[menuChoice], (100, 100))
                     # Overlaying the filter image over the face
-                    cameraFeedImg= cvzone.overlayPNG(cameraFeedImg, filterImg, [xLoc, yLoc])
-
+                    cameraFeedImg = cvzone.overlayPNG(
+                        cameraFeedImg, filterImg, [xLoc, yLoc])
 
     except Exception as e:
-            print("Exception", e) 
+        print("Exception", e)
 
     try:
         for image in menuImages:
             margin = 20
-            image = cv2.resize(image, (xIncrement - margin, xIncrement - margin))
+            image = cv2.resize(
+                image, (xIncrement - margin, xIncrement - margin))
             cameraFeedImg = cvzone.overlayPNG(cameraFeedImg, image, [x, 0])
             x = x + xIncrement
     except:
         print("out of bounds")
-   
+
     cv2.imshow("Face Filter App", cameraFeedImg)
     cv2.waitKey(1)
