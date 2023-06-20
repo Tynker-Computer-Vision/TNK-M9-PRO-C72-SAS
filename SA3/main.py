@@ -86,7 +86,7 @@ while True:
                     dx = 0
                     dy = 0
 
-                    # Check if menuchoice is 0,1,2,3,4 and set the variables scale, dx, dy
+                    
                     if(menuChoice == 0):
                         scale = 90
                         dx = 5
@@ -95,6 +95,7 @@ while True:
                         scale = 85
                         dx = 5
                         dy = 80
+                    # Check if menuchoice is 2,3,4 and set the variables scale, dx, dy    
                     if(menuChoice == 2):
                         scale = 55
                         dx = 20
